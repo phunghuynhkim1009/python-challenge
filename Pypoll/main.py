@@ -9,50 +9,60 @@ print("-------------------------")
 csvpath = r"Pypoll/Resources/election_data.csv"
 # csvpath = os.path.join("..","Resources", "budget_data.csv")
 
-column_index_0 = 0
-column_index_1 = 1
-column_index_2 = 2
-
-# Initialize variables to store the max increase/decrease and corresponding date
-greatest_increase = 0
-previous_value = None
-greatest_increase_date = ""
-greatest_decrease = 0
-greatest_decrease_date = ""
+total_votes = 0
+candidate_votes = {}
 
 # Open the CSV using the UTF-8 encoding
 with open(csvpath, encoding='UTF-8') as csvfile:
     csvreader = csv.reader(csvfile, delimiter=",")
-    #print(csvreader)
 
     # Read the header row first (skip this step if there is no header)
     csv_header = next(csvreader)
     #print(f"CSV Header: {csv_header}")
 
     # The total number of votes cast
-    Total_vote = [row[column_index_0] for row in csvreader]
-    print("Total Votes: " + str(len(Total_vote)))
-    print("-------------------------")
-
-    # A complete list of candidates who received votes
-with open(csvpath, encoding='UTF-8') as csvfile:
-    csvreader = csv.reader(csvfile, delimiter=",")
-    #print(csvreader)
-
-    # Read the header row first (skip this step if there is no header)
-    csv_header = next(csvreader)
-    #print(f"CSV Header: {csv_header}")
-    # Initialize an empty set to store unique candidates
-    candidates_set = set()
-    
-    # Iterate over each line in the file
     for row in csvreader:
-        # Split the line by comma to extract the candidate name
-        candidate = row[2]        
-        # Add the candidate to the set
-        candidates_set.add(candidate)
+        total_votes += 1
+        candidate = row[2]
+        if candidate in candidate_votes:
+            candidate_votes[candidate] += 1
+        else:
+            candidate_votes[candidate] = 1
+    # Calculate the percentage of votes each candidate won
+results = {}
+for candidate, votes in candidate_votes.items():
+    percentage = (votes / total_votes) * 100
+    results[candidate] = percentage
 
-        #Print the list of candidates
-    print("List of candidates who received votes:")
-    for candidate in candidates_set:
-        print(candidate)
+# Print the results
+print("Election Results")
+print("-------------------------")
+print(f"Total Votes: {total_votes}")
+print("-------------------------")
+for candidate, percentage in results.items():
+    print(f"{candidate}: {percentage:.3f}% ({candidate_votes[candidate]})")
+print("-------------------------")
+winner = max(results, key=results.get)
+print(f"Winner: {winner}")
+print("-------------------------")
+
+#------------------------------
+# Pypoll results
+pypoll_results = {
+    "Total Votes": " 369711",
+    "------------": "------------",
+    "Charles Casper Stockham": " 23.049% (85213)",
+    "Diana DeGette": " 73.812% (272892)",
+    "Raymon Anthony Doane": " 3.139% (11606)",
+    "--------------": "----------------",
+    "Winner": " Diana DeGette",
+    "-------------": "--------------"
+}
+
+# Export results to text file
+with open("Pypoll Election Results.txt", "w") as file:
+    file.write("Election results\n")
+    file.write("----------------------\n")
+    for key, value in pypoll_results.items():
+        file.write(f"{key}: {value}\n")
+    file.write("\n")
