@@ -60,7 +60,7 @@ pypoll_results = {
 }
 
 # Export results to text file
-with open("Pypoll Election Results.txt", "w") as file:
+with open(r"Pypoll/analysis/Pypoll Election Results.txt", "w") as file:
     file.write("Election results\n")
     file.write("----------------------\n")
     for key, value in pypoll_results.items():

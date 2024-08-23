@@ -107,17 +107,9 @@ pybank_results = {
 }
 
 # Export results to text file
-with open("Pybank Financial Analysis.txt", "w") as file:
+with open(r"Pybank/analysis/financial_analysis.txt", 'w') as file:
     file.write("Financial Analysis\n")
     file.write("----------------------\n")
     for key, value in pybank_results.items():
         file.write(f"{key}: {value}\n")
     file.write("\n")
-
-
-
-
-
-
-    
-
